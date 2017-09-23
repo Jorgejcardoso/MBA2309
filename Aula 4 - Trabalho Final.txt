@@ -1,0 +1,131 @@
+TASK 01
+
+Importação de Arquivo no HDFS
+
+Crie um novo diretório no  HDFS chamado /trabalho/flightdelays
+
+Coloque os três arquivos de flightdelays do diretório local de sua VM no diretório the /trabalho/flightdelays no HDFS.
+
+TASK 02
+
+Transformação e limpeza de dados com o Pig.
+
+O arquivo de flightdelays possui os campos separados por vírgula. As colunas do arquivo compoe o schema a seguir:
+
+Year, Month, DayofMonth, DayOfWeek, DepTime, CRSDepTime, ArrTime, CRSArrTime,UniqueCarrier, FlightNum, TailNum, ActualElapsedTime, CRSElapsedTime, AirTime,ArrDelay, DepDelay, Origin, Dest, Distance, TaxiIn, TaxiOut, Cancelled, 
+CancellationCode, Diverted, CarrierDelay, WeatherDelay, NASDelay, SecurityDelay,LateAircraftDelay                
+                
+
+Esreva um script no Pig que satisfaça os critérios abaixo:
+
+Carregar todos os dados de /trabalho/flightdelays.
+
+Remover todas as linhas em flightdelays onde a coluna DepTime estiver com o texto "NA".
+
+A saída deverá conter somente: Year, Month, DayofMonth, DepTime, UniqueCarrier, FlightNum, ArrDelay, Origin e Dest.
+
+Salve os resultados em um novo diretório no HDFS (/trabalho/flightdelays_clean), com os dados separados por vírgulas.
+
+Salve o seu script em um arquivo chamado flightdelays_clean.pig no diretório /home/ no local file system.
+
+TASK 03
+
+Análise de dados com Pig
+
+Escreva um script em Pig chamado /home/cleaned_total.pig que calcule o número de linhas nos arquivos salvos em trabalho/flightdelays_clean no HDFS. Salve o resultado de seu script em um novo diretório no HDFS chamado cleaned_total.
+
+A coluna Dest representa o código do aeroporto de destino do voo. Escreva um script no Pig que calcule o total de linhas de /trabalho/flightdelays_clean que contenham o total de voos com destino igual a "DEN". Salve o seu script em /home/denver_total.pig no local file system. Salve os resultados de seu script em /trabalho/denver_total no HDFS.
+
+
+A coluna ArrDelay representa o número de minutos de atraso de um voo. Escreva um script em Pig que conte o número de voos com atraso superior a 60 minutos do destino igual a "DEN". Salve o seu script em /home/denver_late.pig e salve os resultados no HDFS em /trabalho/denver_late.
+
+
+TASK 04
+
+Criação de tabela no Hive
+
+Crie uma tabela chamada flightdelays no Hive que tenha o mesmo schema dos dados do arquivo salvo em: /trabalho/flightdelays_clean. A tabela deve satisfazer os critérios a seguir:
+
+Uma tabela externa com a localização em: /tarbalho/flightdelays_clean
+
+O schema possui as colunas: Year, Month, DayOfMonth, DepTime, UniqueCarrier, FlightNum, ArrDelay, Origin e Dest
+
+As colunas UniqueCarrier, Origin e Dest são do tipo "string" types. As demais colunas são do tipo: "integer".
+
+TASK 05
+
+Uso do HCatalog com Pig
+
+Escreva um script em Pig e salve-o no local file system com o nome /home/flightdelays_nonzero.pig, que satisfaça os critérios abaixo:
+
+Rode o Pig no modo Tez como engine de execução.
+
+Carregue os dados da tabela flightdelays do Hive usando HCatalog.
+
+Remova as linhas que tenham arrdelay menor ou igual a zero.
+
+Ordene a saída pela coluna arrdelay de forma decrescente.
+
+Salve os resultados em um arquivo separado por vírgulas no diretório no HDFS chamado /trabalho/flightdelays_nonzero.
+
+
+TASK 06
+
+Análise de Dados com Hive
+
+
+Escreva uma query (HiveQL) para cada critério abaixo e salve os comandos no HDFS, no arquivo: /trabalho/flightdelays.hive.
+
+Calcule a média de voos em atraso dos voos chegando em Denver("DEN").
+
+Calcule a média de atrasos de voos com origem em "LAX" e destino em "SFO".
+
+Determine qual aeroporto possui a maior média de atrasos no destino.
+
+TASK 07
+
+Crie e popule uma tabela do tipo ORCFile
+
+Crie uma tabela no Hive chamada sfo_weather que satisfaça os critérios a seguir:
+
+A Hive-managed table
+
+The data is stored in the ORCFile format
+
+A tabela será populada com os registros de /trabalho/sfo_weather.csv.
+
+O schema deve atender ao formato das colunas do arquivo. A prmeira coluna deverá ser definida no formato "String" e as demais como "Integers".
+
+TASK 08
+
+Hive Join
+
+
+Escrea uma query no Hive e salve no arquivo /trabalho/flights_weather.hive, que atenda aos critérios:
+
+Use Tez como execution engine.
+
+O resultado da query deverá ser utilizado para criar uma nova tabela chamada flights_weather.
+
+Faça um Join das tabelas flightdelays e sfo_weather, onde dest ou origin igual a "SFO" em flightdelays e year, month e dayofmonth são iguais nas duas tabelas.
+
+
+Selecione todas as colunas de flightdelays e temperature_max e temperature_min da tabela sfo_weather.
+
+
+TASK 09
+
+Sqoop Export
+
+Crie um tabela no mysql chamada "flightinfo" conforme o schema abaixo. Salve o arquivo "sfo_weather.csv" fornecido pelo professor, no diretório /trabalho/sqoop_export no HDFS. Em seguida, exporte o arquivo para o mysql com o Sqoop.
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| station       | varchar(100) | YES  |     | NULL    |       |
+| year          | int(11)      | YES  |     | NULL    |       |
+| month         | int(11)      | YES  |     | NULL    |       |
+| dayofmonth    | int(11)      | YES  |     | NULL    |       |
+| precipitation | int(11)      | YES  |     | NULL    |       |
+| maxtemp       | int(11)      | YES  |     | NULL    |       |
+| mintemp       | int(11)      | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------
